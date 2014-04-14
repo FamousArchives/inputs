@@ -48,7 +48,8 @@ define(function(require, exports, module) {
             clientX  : undefined,
             clientY  : undefined,
             count    : 0,
-            touch    : undefined
+            touch    : undefined,
+            longPress: undefined
         };
 
         if (options) this.setOptions(options);
@@ -67,12 +68,13 @@ define(function(require, exports, module) {
 
     function _clearPayload() {
         var payload = this._payload;
-        payload.position = null;
-        payload.velocity = null;
-        payload.clientX  = undefined;
-        payload.clientY  = undefined;
-        payload.count    = undefined;
-        payload.touch    = undefined;
+        payload.position  = null;
+        payload.velocity  = null;
+        payload.clientX   = undefined;
+        payload.clientY   = undefined;
+        payload.count     = undefined;
+        payload.touch     = undefined;
+        payload.longPress = undefined;
     }
 
     // handle 'trackstart'
@@ -82,6 +84,7 @@ define(function(require, exports, module) {
         var payload = this._payload;
         payload.count = data.count;
         payload.touch = data.identifier;
+        payload.longPress = data.longPress;
 
         this.output.emit('start', payload);
     }
@@ -133,13 +136,14 @@ define(function(require, exports, module) {
         }
 
         var payload = this._payload;
-        payload.delta    = nextDelta;
-        payload.position = nextPos;
-        payload.velocity = nextVel;
-        payload.clientX  = data.touch.clientX;
-        payload.clientY  = data.touch.clientY;
-        payload.count    = data.count;
-        payload.touch    = data.touch.identifier;
+        payload.delta     = nextDelta;
+        payload.position  = nextPos;
+        payload.velocity  = nextVel;
+        payload.clientX   = data.touch.clientX;
+        payload.clientY   = data.touch.clientY;
+        payload.count     = data.count;
+        payload.touch     = data.touch.identifier;
+        payload.longPress = data.longPress;
 
         this.output.emit('update', payload);
     }
@@ -173,11 +177,12 @@ define(function(require, exports, module) {
         }
 
         var payload = this._payload;
-        payload.velocity = nextVel;
-        payload.clientX  = data.clientX;
-        payload.clientY  = data.clientY;
-        payload.count    = count;
-        payload.touch    = data.touch.identifier;
+        payload.velocity  = nextVel;
+        payload.clientX   = data.clientX;
+        payload.clientY   = data.clientY;
+        payload.count     = count;
+        payload.touch     = data.touch.identifier;
+        payload.longPress = data.longPress;
 
         this.output.emit('end', payload);
     }
