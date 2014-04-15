@@ -16,6 +16,10 @@ define(function(require, exports, module) {
      *   events with position, velocity, acceleration, and touch id.
      *   Useful for dealing with inputs on touch devices.
      *
+     *   Payload has been augmented with limited gesture detection:
+     *     longPress: 'unknown','true' or 'false' (use in 'move' or 'end' event)
+     *     tap: 'unknown', true' or 'false' (use in 'end' event)
+     *     doubleTap: 'unknown', 'true' or 'false' (use in 'end' event)
      *
      * @class TouchSync
      * @constructor
@@ -50,7 +54,8 @@ define(function(require, exports, module) {
             count    : 0,
             touch    : undefined,
             longPress: undefined,
-            tap      : undefined
+            tap      : undefined,
+            doubleTap: undefined
         };
 
         if (options) this.setOptions(options);
@@ -77,6 +82,7 @@ define(function(require, exports, module) {
         payload.touch     = undefined;
         payload.longPress = undefined;
         payload.tap       = undefined;
+        payload.doubleTap = undefined;
     }
 
     // handle 'trackstart'
@@ -85,10 +91,11 @@ define(function(require, exports, module) {
 
         var payload = this._payload;
         payload.count = data.count;
-        // payload.touch = data.identifier;
+        // payload.touch = data.identifier;         // changed to full 'touch' object because history in TouchTracker is deleted on "trackend"
         payload.touch = data.touch;
         payload.longPress = data.longPress;
         payload.tap = data.tap;
+        payload.doubleTap = data.doubleTap;
 
         this.output.emit('start', payload);
     }
@@ -146,10 +153,11 @@ define(function(require, exports, module) {
         payload.clientX   = data.touch.clientX;
         payload.clientY   = data.touch.clientY;
         payload.count     = data.count;
-        // payload.touch     = data.touch.identifier;
+        // payload.touch     = data.touch.identifier;         // changed to full 'touch' object because history in TouchTracker is deleted on "trackend"
         payload.touch     = data.touch;
         payload.longPress = data.longPress;
         payload.tap       = data.tap;
+        payload.doubleTap = data.doubleTap;
 
         this.output.emit('update', payload);
     }
@@ -187,10 +195,11 @@ define(function(require, exports, module) {
         payload.clientX   = data.clientX;
         payload.clientY   = data.clientY;
         payload.count     = count;
-        // payload.touch     = data.touch.identifier;
+        // payload.touch     = data.touch.identifier;         // changed to full 'touch' object because history in TouchTracker is deleted on "trackend"
         payload.touch     = data.touch;
         payload.longPress = data.longPress;
         payload.tap       = data.tap;
+        payload.doubleTap = data.doubleTap;
 
         this.output.emit('end', payload);
     }
