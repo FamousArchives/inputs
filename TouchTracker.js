@@ -22,12 +22,36 @@ define(function(require, exports, module) {
             timestamp: now,
             count: count,
             history: history,
-            longPress: _determineLongPress(touchClone, history, now, isTouchEnd)
+            longPress: _determineLongPress(touchClone, history, now, isTouchEnd),
+            tap: _determineTap(touchClone, history, isTouchEnd)
         };
     }
 
     /**
-     * Determine if touch began with a 'Long Press'
+     * Determine if touch should be considered a "tap"
+     * @param {Object} touch
+     * @param {Array} history
+     * @param {Boolean} isTouchEnd
+     * @returns {String} Whether touch should be conisdered a "tap"
+     *   'false' -- touch has moved too far to qualify as a "tap"
+     *   'true' -- touch has completed without moving more than LONG_PRESS_DRAG_THRESHHOLD in X or Y plane
+    */
+    function _determineTap(touch, history, isTouchEnd) {
+        var tap = 'false';
+        if (!isTouchEnd) return tap;
+        if (history && (history.length > 0)) {
+            if ((Math.abs(touch.clientX - history[0].touch.clientX) > LONG_PRESS_DRAG_THRESHHOLD) ||
+                (Math.abs(touch.clientY - history[0].touch.clientY) > LONG_PRESS_DRAG_THRESHHOLD)) {
+                tap = 'false';
+            } else {
+                tap = 'true';
+            }
+        }
+        return tap;
+    }
+
+    /**
+     * Determine if touch began with a "Long Press"
      * @param {Object} touch
      * @param {Array} history
      * @param {Number} now
@@ -35,7 +59,7 @@ define(function(require, exports, module) {
      * @returns {String} Whether touch began with a 'Long Press'
      *   'unknown' -- press is not yet long enough to qualify for, and has not yet moved far enough to rule out, a long press
      *   'false' -- press has moved too far before the LONG_PRESS_THRESHHOLD to qualify as a long press
-     *   'true' -- press has lasted longer than LONG_PRESS_THRESHHOLD without moving more than LONG_PRESS_DRAG_THRESHHOLD in X or Y
+     *   'true' -- press has lasted longer than LONG_PRESS_THRESHHOLD without moving more than LONG_PRESS_DRAG_THRESHHOLD in X or Y plane
     */
     function _determineLongPress(touch, history, now, isTouchEnd) {
         var longPress = 'unknown';

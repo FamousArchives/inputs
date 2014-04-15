@@ -49,7 +49,8 @@ define(function(require, exports, module) {
             clientY  : undefined,
             count    : 0,
             touch    : undefined,
-            longPress: undefined
+            longPress: undefined,
+            tap      : undefined
         };
 
         if (options) this.setOptions(options);
@@ -75,6 +76,7 @@ define(function(require, exports, module) {
         payload.count     = undefined;
         payload.touch     = undefined;
         payload.longPress = undefined;
+        payload.tap       = undefined;
     }
 
     // handle 'trackstart'
@@ -83,8 +85,10 @@ define(function(require, exports, module) {
 
         var payload = this._payload;
         payload.count = data.count;
-        payload.touch = data.identifier;
+        // payload.touch = data.identifier;
+        payload.touch = data.touch;
         payload.longPress = data.longPress;
+        payload.tap = data.tap;
 
         this.output.emit('start', payload);
     }
@@ -142,8 +146,10 @@ define(function(require, exports, module) {
         payload.clientX   = data.touch.clientX;
         payload.clientY   = data.touch.clientY;
         payload.count     = data.count;
-        payload.touch     = data.touch.identifier;
+        // payload.touch     = data.touch.identifier;
+        payload.touch     = data.touch;
         payload.longPress = data.longPress;
+        payload.tap       = data.tap;
 
         this.output.emit('update', payload);
     }
@@ -181,8 +187,10 @@ define(function(require, exports, module) {
         payload.clientX   = data.clientX;
         payload.clientY   = data.clientY;
         payload.count     = count;
-        payload.touch     = data.touch.identifier;
+        // payload.touch     = data.touch.identifier;
+        payload.touch     = data.touch;
         payload.longPress = data.longPress;
+        payload.tap       = data.tap;
 
         this.output.emit('end', payload);
     }
