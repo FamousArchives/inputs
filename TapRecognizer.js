@@ -35,6 +35,7 @@ define(function(require, exports, module) {
      * @class TapRecognizer
      * @constructor
      * @param {Object} options default options overrides
+     * @param {boolean} [options.emitEveryTap=true] true: emit every tap or false: suppress the 'tap' before a 'doubletap'
      */
     function TapRecognizer(options) {
         this.eventInput = new EventHandler();
@@ -42,7 +43,7 @@ define(function(require, exports, module) {
 
         // default options
         this.options = {
-            emitEveryTap: 'true'                           // true: emit every tap or false: supress the 'tap' before a 'doubletap'
+            emitEveryTap: 'true'
         };
 
         this.pendingTap     = undefined;                    // tap payload that will be emited next
