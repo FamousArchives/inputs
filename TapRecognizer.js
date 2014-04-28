@@ -80,7 +80,6 @@ define(function(require, exports, module) {
 
     // handle 'trackstart'
     function _handleStart(data) {
-        console.log("TapRecognizer._handleStart()");
         this.tapState = TapRecognizer.STARTED;
         this.lastTrackstart = data;
     }
@@ -124,7 +123,7 @@ define(function(require, exports, module) {
             (now - this.lastTrackstart.timeStamp < TapRecognizer.TAP_THRESHOLD)) {
                 this.tapState = TapRecognizer.TAP;
                 this.pendingTap = _buildPayload.call(this, data);
-                if (this.options.emitEveryTap === "true") {
+                if (emitEveryTap) {
                     _broadcast.call(this);
                 } else {
                     Timer.setTimeout(_broadcast.bind(this), TapRecognizer.DOUBLE_TAP_THRESHOLD);
@@ -155,15 +154,11 @@ define(function(require, exports, module) {
     }
 
     function _broadcast() {
-        //var now = Date.now();
         if ((this.tapState === TapRecognizer.STARTED) || (this.tapState === TapRecognizer.TAP)) {
-            console.log("TapRecognizer() emit 'tap'");
             this.eventOutput.emit('tap', this.pendingTap);
         } else if (this.tapState === TapRecognizer.DOUBLE_TAP) {
-            console.log("TapRecognizer() emit 'doubletap'");
             this.eventOutput.emit('doubletap', this.pendingTap);
         } else if (this.tapState === TapRecognizer.PRESS) {
-            console.log("TapRecognizer() emit 'press'");
             this.eventOutput.emit('press', this.pendingTap);
         }
         if (this.tapState !== TapRecognizer.STARTED) {
@@ -171,9 +166,6 @@ define(function(require, exports, module) {
             this.tapState = TapRecognizer.INVALID_TAP;          // we've handled the current tap
         }
         this.lastTap = this.pendingTap;
-        //if (this.lastTap) {
-        //    this.lastTap.timestamp = now;
-        //}
         this.pendingTap = undefined;
     }
 
