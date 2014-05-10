@@ -54,7 +54,7 @@ define(function(require, exports, module) {
             var previousEvent = recentlyDispatched[i];
             if (currTime - i < clickWindow) {
                 if (event instanceof window.MouseEvent && event.target === previousEvent.target) event.stopPropagation();
-                else if (event instanceof win.MouseEvent && event.target !== previousEvent.target) {
+                else if (event instanceof window.MouseEvent && event.target !== previousEvent.target) {
                     // prevent ghost click
                     event.stopPropagation();
                     event.preventDefault();
