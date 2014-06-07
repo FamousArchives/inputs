@@ -34,8 +34,7 @@ define(function(require, exports, module) {
         EventHandler.setOutputHandler(this, this._eventOutput);
 
         this._syncs = {};
-        if (syncs) this.addSync(syncs);
-        if (options) this.setOptions(options);
+        if (syncs) this.addSync(syncs, options);
     }
 
     GenericSync.DIRECTION_X = 0;
@@ -112,13 +111,13 @@ define(function(require, exports, module) {
      * @param syncs {Object|Array.String} an array of registered sync keys
      *    or an object with fields {sync key : sync options}
      */
-    GenericSync.prototype.addSync = function addSync(syncs) {
+    GenericSync.prototype.addSync = function addSync(syncs, options) {
         if (syncs instanceof Array)
             for (var i = 0; i < syncs.length; i++)
-                _addSingleSync.call(this, syncs[i]);
+                _addSingleSync.call(this, syncs[i], options);
         else if (syncs instanceof Object)
             for (var key in syncs)
-                _addSingleSync.call(this, key, syncs[key]);
+                _addSingleSync.call(this, syncs[key], options);
     };
 
     module.exports = GenericSync;
