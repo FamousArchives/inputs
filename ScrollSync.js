@@ -63,7 +63,8 @@ define(function(require, exports, module) {
         rails: false,
         scale: 1,
         stallTime: 50,
-        lineHeight: 40
+        lineHeight: 40,
+        preventDefault: true
     };
 
     ScrollSync.DIRECTION_X = 0;
@@ -91,7 +92,7 @@ define(function(require, exports, module) {
     }
 
     function _handleMove(event) {
-        event.preventDefault();
+        if (this.options.preventDefault) event.preventDefault();
 
         if (!this._inProgress) {
             this._inProgress = true;
