@@ -62,7 +62,8 @@ define(function(require, exports, module) {
         direction: undefined,
         rails: false,
         scale: 1,
-        propogate: true  // events piped to document on mouseleave
+        propogate: true,  // events piped to document on mouseleave
+        preventDefault: true
     };
 
     MouseSync.DIRECTION_X = 0;
@@ -75,7 +76,7 @@ define(function(require, exports, module) {
     function _handleStart(event) {
         var delta;
         var velocity;
-        event.preventDefault(); // prevent drag
+        if (this.options.preventDefault) event.preventDefault(); // prevent drag
 
         var x = event.clientX;
         var y = event.clientY;
